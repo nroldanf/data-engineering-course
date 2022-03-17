@@ -1,0 +1,9 @@
+name: data-engineering
+channels:
+  - defaults
+dependencies:
+  - pip=21.0.1
+  - python=3.8
+  - pip:
+    - -r requirements.txt
+prefix: /opt/anaconda3/envs/data-engineering
