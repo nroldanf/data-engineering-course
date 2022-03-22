@@ -1,33 +1,15 @@
-# PYTHON_PATH=$$(which python3)
-# SHELL:=/bin/zsh
-# CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activate ; conda activate
 CD = $(shell pwd)
 PYTHON_IMAGE := python-base
 DOCKERFILES_DIR := dockerfiles/
 INGESTION_DIR := ingestion
 
-default: build download processing
+default: build create-db download processing data-quality
 
-# download-files:
-# 	( \
-# 		mkdir files csv; \
-# 		source pyenv/bin/activate; \
-# 		python ingestion.py; \
-# 	)
-
-
-# set-conda-env:
-# 	( \
-# 		virtualenv -p ${PYTHON_PATH} pyenv; \
-# 		source pyenv/bin/activate; \
-# 		python -m pip install -r requirements.txt; \
-# 	)
 build:
 	docker build -t ${PYTHON_IMAGE} -f dockerfiles/Dockerfile.python ${DOCKERFILES_DIR}
 
 create-db:
-	mkdir db
-	docker-compose up --build -d
+	docker-compose up -d
 
 download:
 	docker run -v ${CD}:/app -it ${PYTHON_IMAGE} python ${INGESTION_DIR}/download.py
